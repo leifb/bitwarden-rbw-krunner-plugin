@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Bitwarden
+Comment=Search and copy passwords from Bitwarden using rbw
+X-KDE-ServiceTypes=Plasma/Runner
+Type=Service
+Icon=password-copy
+X-KDE-PluginInfo-Website=https://github.com/leifb/bitwarden-rbw-krunner-plugin
+X-KDE-PluginInfo-Author=leifb
+X-KDE-PluginInfo-Email=leif.bernsdorf@gmail.com
+X-KDE-PluginInfo-Name=Bitwarden Rbw KRunner
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=MIT
+X-KDE-PluginInfo-EnabledByDefault=true
+X-Plasma-API=DBus
+X-Plasma-DBusRunner-Service=de.leifb.BitwardenRbwKrunner
+X-Plasma-DBusRunner-Path=/runner

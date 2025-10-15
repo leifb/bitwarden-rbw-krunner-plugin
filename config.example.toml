@@ -1,0 +1,14 @@
+# The prefix to use for searching.
+# Set to an empty string to disable.
+prefix = "pw "
+
+# The minimum length of the search term.
+# If 0, all entries will be displayed when no term is entered.
+min_length = 1
+
+# If true, the password will be included when showing an entries info (shift+enter).
+show_password = true
+
+# Special command that triggers a database sync.
+# Set to an empty string to disable.
+sync_command = "pws"
