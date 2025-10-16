@@ -8,14 +8,13 @@ it up or want to use this repo as a template for your own plugin.
 
 ## Features
 
-- Search for entries and copy the password to the clipboard
-  - by default, you will need to use the prefix `"pw "`
-  - the password will be copied to the clipboard when pressing `enter`
-- Show all info for an entry in a notification by pressing `shift + enter`
-- Due to the awesome `rbw` CLI, you will be promoted for your password if
-  the local database is locked
-- `rbw` also makes searching fast, since everything is happening locally
+- Type `"pw <term>"` to search for bitwarden entries
+  - Copy the password to the clipboard by selecting one (`enter`)
+- Show the complete entry in a notification by pressing `shift + enter`
 - Quick command for manually syncing the database (default `pws`)
+- Support for multiple profiles / accounts
+  - Switch the profile by typing `pwp <profile>`
+- Searching is relatively fast, since `rbw` is doing the search locally
 
 ## Requirements
 
@@ -56,6 +55,16 @@ Note that changes to the config will not be applied until you restart the plugin
 pkill -f bitwarden-rbw-krunner
 ```
 
+## Switching profiles
+
+You can switch between profiles by typing `pwp <profile>` in the krunner search bar.
+Following searches and actions (like sync) will use the selected profile. It is currently
+not possible to use multiple profiles at the same time.
+
+Please note that the selected profile is not saved between restarts.
+
+You can configure the initial profile in the config file.
+
 ## Attributions
 
 This plugin very much depends on the [`krunner`](https://crates.io/crates/krunner) crate,
@@ -70,13 +79,19 @@ I also looked at some python templates for inspiration:
 
 If you are not making a lot of change, you can just use the `install.sh` script
 everytime you want to test your changes. But this can get tedious for more complex
-development. A better way to develop is by setting up the krunner plugin, but not
-installing the dbus service. For that, uninstall if you had it installed
-before:
+development, and you can't use debugging. A slightly better way to develop is to
+kill the currently running service:
 
 ```bash
-./uninstall.sh
+pkill -f bitwarden-rbw-krunner
 ```
+
+Now you can run the plugin with `cargo run` or any other way (like from a IDE).
+
+Unfortunately, if you start krunner while your current development version is not
+running, the dbus service will be started automatically again. If that gets annoying,
+you can set up the krunner plugin, but uninstall the dbus service. For that, use
+the `./uninstall.sh` script.
 
 Next, manually set up the plugin:
 
@@ -84,8 +99,6 @@ Next, manually set up the plugin:
 mkdir -p ~/.local/share/krunner/dbusplugins/
 cp bitwarden-rbw-krunner.desktop ~/.local/share/krunner/dbusplugins/
 ```
-
-Now, you can run the plugin with `cargo run`.
 
 If you made changes to the `.desktop` file, you probably need to restart `krunner`:
 

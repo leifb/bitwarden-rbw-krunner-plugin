@@ -1,5 +1,5 @@
 # The prefix to use for searching.
-# Set to an empty string to disable.
+# Set to an empty string to disable (so no prefix is needed).
 prefix = "pw "
 
 # The minimum length of the search term.
@@ -10,5 +10,18 @@ min_length = 1
 show_password = true
 
 # Special command that triggers a database sync.
-# Set to an empty string to disable.
-sync_command = "pws"
+# Set to an empty string to disable this command.
+command_sync = "pws"
+
+# Special command to change the rbw profile.
+# Set to an empty string to disable this command.
+command_switch_profile = "pwp"
+
+# If true, the plugin will look for rbw profiles in you ~/.config directory on start-up.
+# This will allow it to show available profiles when switching, so you don't have to type
+# them in manually.
+discover_profiles = true
+
+# The rwb profile to use when the plugin starts (usually after logging in).
+# Leave blank for the default profile.
+initial_profile = ""

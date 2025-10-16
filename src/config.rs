@@ -10,7 +10,10 @@ pub struct Config {
     pub prefix: String,
     pub min_length: usize,
     pub show_password: bool,
-    pub sync_command: String,
+    pub command_sync: String,
+    pub command_switch_profile: String,
+    pub discover_profiles: bool,
+    pub initial_profile: String,
 }
 
 impl Default for Config {
@@ -19,7 +22,10 @@ impl Default for Config {
             prefix: "pw ".to_owned(),
             min_length: 1,
             show_password: false,
-            sync_command: "pws".to_owned(),
+            command_sync: "pws".to_owned(),
+            command_switch_profile: "pwp".to_owned(),
+            discover_profiles: true,
+            initial_profile: "".to_owned(),
         }
     }
 }

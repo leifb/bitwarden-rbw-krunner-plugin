@@ -1,15 +1,14 @@
-use crate::rbw;
 use crate::runner::Runner;
 use notify_rust::Notification;
 
 impl Runner {
     /// Gets the full info of a bitwarden entry and shows it as a notification.
-    pub fn show_entry_info(&self, term: String) -> Result<(), String> {
-        let info = rbw::get_full_info(term.clone())?;
+    pub fn show_entry_info(&self, id: String) -> Result<(), String> {
+        let info = self.current_profile.get_full_info(&id)?;
         let info = self.remove_password(info);
 
         Notification::new()
-            .summary(&format!("Bitwarden Entry '{}'", term))
+            .summary(&format!("Bitwarden Entry '{}'", id))
             .body(&info)
             .icon("lock")
             .show()
