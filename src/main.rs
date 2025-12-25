@@ -27,7 +27,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::load()?;
     let runner = Runner {
         known_profiles: get_profiles(&config),
-        current_profile: RbwProfile{ name: config.initial_profile.clone() },
+        current_profile: RbwProfile {
+            name: config.initial_profile.clone(),
+            ..Default::default()
+        },
         config,
     };
     runner.start(DBUS_NAME, DBUS_PATH)?;

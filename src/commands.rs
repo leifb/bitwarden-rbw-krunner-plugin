@@ -2,6 +2,7 @@ use crate::runner::Runner;
 
 pub const COMMAND_ID_SYNC: &str = "__SYNC_LOCAL_DATABASE";
 pub const COMMAND_ID_SWITCH: &str = "__SWITCH_PROFILE";
+pub const COMMAND_ID_UNLOCK: &str = "__UNLOCK_RBW";
 
 impl Runner {
     pub fn is_command_sync(&self, query: &String) -> bool {

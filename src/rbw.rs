@@ -1,9 +1,12 @@
 use log::warn;
 use std::process::Command;
+use std::time::{Duration, Instant};
 
 #[derive(Default)]
 pub struct RbwProfile {
     pub name: String,
+    pub locked: bool,
+    pub locked_last_check: Option<Instant>,
 }
 
 impl RbwProfile {
@@ -90,4 +93,45 @@ impl RbwProfile {
 
         Ok(())
     }
+
+    pub fn is_locked(&mut self) -> Result<bool, String> {
+        let lock_check_timeout = Duration::from_secs(10);
+        if self.locked_last_check.is_some_and(|c| c.elapsed() < lock_check_timeout) {
+            return Ok(self.locked);
+        }
+
+        let mut call = Command::new("rbw");
+        call.env("RBW_PROFILE", &self.name)
+            .arg("unlocked");
+
+        let is_locked = match call.output() {
+            Err(e) => {
+                warn!("Error running rbw: {}", e);
+                return Err(e.to_string());
+            },
+            Ok(output) => {
+                !output.status.success()
+            },
+        };
+
+        self.locked = is_locked;
+        self.locked_last_check = Some(Instant::now());
+        Ok(is_locked)
+    }
+
+    pub fn unlock(&mut self) -> Result<(), String> {
+        let mut call = Command::new("rbw");
+        call.env("RBW_PROFILE", &self.name).arg("unlock");
+
+        if let Err(e) = call.output() {
+            warn!("Error unlocking rbw: {}", e);
+            return Err(e.to_string());
+        };
+
+        self.locked = false;
+        self.locked_last_check = Some(Instant::now());
+
+        Ok(())
+    }
+
 }

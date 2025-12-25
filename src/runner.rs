@@ -1,9 +1,10 @@
-use crate::commands::{COMMAND_ID_SWITCH, COMMAND_ID_SYNC};
+use crate::commands::{COMMAND_ID_SWITCH, COMMAND_ID_SYNC, COMMAND_ID_UNLOCK};
 use crate::config::Config;
 use crate::rbw::RbwProfile;
 use krunner::Match;
 
 const TITLE_SYNC: &str = "Sync database";
+const TILE_UNLOCK: &str = "Unlock database";
 
 #[derive(krunner::Action)]
 pub enum Action {
@@ -44,7 +45,19 @@ impl krunner::Runner for Runner {
             return Ok(vec![]);
         }
 
-        let term = &query[self.config.prefix.len()..];
+        if self.current_profile.is_locked()? {
+            return Ok(vec![
+                Match {
+                    id: COMMAND_ID_UNLOCK.to_owned(),
+                    title: TILE_UNLOCK.to_owned(),
+                    icon: "lock".to_owned().into(),
+                    relevance: 1.0,
+                    ..Match::default()
+                }
+            ]);
+        }
+
+        let term = &query[self.config.prefix.len()..].trim();
         if term.len() < self.config.min_length {
             return Ok(vec![]);
         }
@@ -67,6 +80,10 @@ impl krunner::Runner for Runner {
             return self.current_profile.sync();
         }
 
+        if match_id == COMMAND_ID_UNLOCK {
+            return self.current_profile.unlock();
+        }
+
         if match_id.starts_with(COMMAND_ID_SWITCH) {
             return self.switch_profile(match_id);
         }
@@ -86,6 +103,7 @@ impl Runner {
         };
         self.current_profile = RbwProfile {
             name: profile.to_owned(),
+            ..Default::default()
         };
         Ok(())
     }
